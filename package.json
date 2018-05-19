@@ -27,6 +27,8 @@
     "redux": "^4.0.0"
   },
   "devDependencies": {
-    "react-scripts": "^1.1.4"
+    "node-sass": "^4.9.0",
+    "react-scripts": "^1.1.4",
+    "sass-loader": "^7.0.1"
   }
 }
