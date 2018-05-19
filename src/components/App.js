@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
+
+import Robot from './Robot';
 
 const App = () => (
   <div>
-    Test
+    <Robot/>
   </div>
 );
 
-export default App
+export default App;
