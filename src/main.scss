@@ -1,5 +1,133 @@
+$main-color: darkcyan;
+$alternative-color: white;
+$sub-color: indianred;
+$border-color: #e6e6e6;
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+.robot {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  .head, .body, .foot {
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+  }
+  .head {
+    background: $main-color;
+    height: 25%;
+    border-radius: 1000px 1000px 0 0;
+    display: block;
+    margin-top: 3%;
+    margin-bottom: 2%;
+    position: relative;
+    &:after, &:before {
+      content: '';
+      width: 5%;
+      height: 10%;
+      top: 45%;
+      background: $alternative-color;
+      position: absolute;
+      border-radius: 100%;
+    }
+    &:before {
+      left: 20%;
+    }
+    &:after {
+      right: 20%;
+    }
+  }
+  .body {
+    height: 45%;
+    display: block;
+    background: $main-color;
+    border-radius: 0 0 10% 10%;
+    position: relative;
+    &:after, &:before {
+      content: '';
+      background: $main-color;
+      position: absolute;
+      top: 0;
+      width: 15%;
+      height: 70%;
+      border-radius: 1000px;
+    }
+    &:before {
+      left: -18%;
+    }
+    &:after {
+      right: -18%;
+    }
+  }
+  .foot {
+    height: 20%;
+    position: relative;
+    display: block;
+    &:after, &:before {
+      content: '';
+      background: $main-color;
+      position: absolute;
+      width: 15%;
+      height: 100%;
+      border-radius: 0 0 1000px 1000px;
+    }
+    &:before {
+      left: 20%;
+    }
+    &:after {
+      right: 20%;
+    }
+  }
+}
+
+.button {
+  background: $sub-color;
+  border: none;
+  outline: none;
+  text-transform: uppercase;
+  color: #fff;
+  height: 30px;
+  width: 100px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover {
+    background: darken($sub-color, 20%);
+  }
+}
+
+.commands {
+  width: 130px;
+  position: absolute;
+  right: 0;
+  padding: 0 15px;
+  top: 0;
+  .commands-title {
+    font-size: 16px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+}
+
+.table-grid {
+  padding-right: 130px;
+  &:after {
+    content: '';
+    clear: both;
+  }
+  .table-cell {
+    border: 1px solid $border-color;
+    float: left;
+  }
 }

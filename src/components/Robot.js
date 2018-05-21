@@ -8,8 +8,15 @@ const Robot = (props) => {
     rotateDeg = DIRECTIONS[props.direction].rotate;
   }
 
+  const style = {
+    ...props.position,
+    transform: 'rotate(' + rotateDeg + 'deg)',
+    width: props.size,
+    height: props.size,
+  };
+
   return (
-    <div id={props.id} className="robot" style={{ transform: 'rotate(' + rotateDeg + 'deg)' }}>
+    <div id={props.id} className="robot" style={style}>
       <span className="head"/>
       <span className="body"/>
       <span className="foot"/>
@@ -19,7 +26,7 @@ const Robot = (props) => {
 
 Robot.propTypes = {
   id: PropTypes.string.isRequired,
-  direction: PropTypes.string
+  direction: PropTypes.number
 };
 
 Robot.defaultProp = {
