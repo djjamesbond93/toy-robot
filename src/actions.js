@@ -2,14 +2,36 @@ import {
   MOVE,
   PLACE,
   ROTATE,
-  DIRECTIONS, SET_TABLE_SIZE,
+  DIRECTIONS,
+  SET_TABLE_SIZE,
+  SAVE,
 } from './constants';
 
 function place(x, y, f) {
-  return {
-    type: PLACE,
-    direction: f,
-    x, y
+  const errorStack = [];
+  if (isNaN(x)) {
+    errorStack.push('x should be number');
+  }
+
+  if (isNaN(y)) {
+    errorStack.push('y should be number');
+  }
+
+  // calculate direction
+  const direction = DIRECTIONS.findIndex((item) => item.name === f);
+  if (direction === -1) {
+    errorStack.push('f should be NORTH, EAST, SOUTH, WEST');
+  }
+
+  if (errorStack.length > 0) {
+    // have error with place data
+    alert(errorStack.join('\n'));
+  } else {
+    return {
+      type: PLACE,
+      direction,
+      x, y
+    }
   }
 }
 
@@ -32,16 +54,21 @@ function rotateRight(from) {
   const newDirection = from + 1;
   return {
     type: ROTATE,
-    direction: newDirection >= DIRECTIONS.length ?  0 : newDirection,
+    direction: newDirection >= DIRECTIONS.length ? 0 : newDirection,
   }
 }
 
 function setTableSize(column, row) {
-  console.log(column, row);
   return {
     type: SET_TABLE_SIZE,
     maxX: row - 1,
     maxY: column - 1,
+  }
+}
+
+function save() {
+  return {
+    type: SAVE,
   }
 }
 
@@ -51,5 +78,6 @@ export {
   move,
   rotateLeft,
   rotateRight,
-  setTableSize
+  setTableSize,
+  save
 }

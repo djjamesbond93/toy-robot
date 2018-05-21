@@ -1,23 +1,25 @@
 import {
+  CREATOR,
   DEFAULT_DIRECTION, DIRECTION_EAST,
-  DIRECTION_NORTH, DIRECTION_SOUTH, DIRECTION_WEST,
+  DIRECTION_NORTH, DIRECTION_SOUTH, DIRECTION_WEST, DIRECTIONS,
   MOVE,
   PLACE,
-  ROTATE, SET_TABLE_SIZE
+  ROTATE, SET_TABLE_SIZE,
+  SAVE, SAVE_METHOD, SAVE_URL
 } from './constants';
 
 const initialState = {
-  x: null,
-  y: null,
+  x: 0,
+  y: 0,
   direction: DEFAULT_DIRECTION,
   maxX: 0,
   maxY: 0,
+  logs: [],
 };
 
 const moveRobot = (state, step = 1) => {
   let newX = state.x;
   let newY = state.y;
-  console.log(state);
 
   // increase step for axis by direction
   switch (state.direction) {
@@ -57,34 +59,63 @@ const moveRobot = (state, step = 1) => {
   }
 };
 
+const pushLog = (state, actionType) => {
+  if ([PLACE, ROTATE, MOVE].indexOf(actionType) !== -1 ) { // only log with PLACE, ROTATE and MOVE
+    state.logs.push({
+      action: actionType,
+      value: `${state.x},${state.y},${DIRECTIONS[state.direction].name}`,
+      creator: CREATOR,
+    });
+  }
+};
+const saveLog = (logs) => {
+  fetch(SAVE_URL, {
+    'method': SAVE_METHOD,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      Accept: 'application/json',
+      email: 'dung.nd.dev@gmail.com',
+    },
+    body: JSON.stringify(logs),
+  })
+    .then(() => alert('Save success'))
+    .catch((error) => alert('Have error when save: ' + error.message))
+
+};
+
 const appReducer = (state = initialState, action) => {
+  let newState = { ...state };
+
   switch (action.type) {
     case SET_TABLE_SIZE:
-      return {
-        ...state,
-        maxX: action.maxX,
-        maxY: action.maxY,
-      };
+      newState.maxX = action.maxX;
+      newState.maxY = action.maxY;
+      break;
     case PLACE:
-      return {
-        ...state,
-        x: action.x,
-        y: action.y,
-        direction: action.direction,
-      };
+      newState.x = action.x;
+      newState.y = action.y;
+      newState.direction = action.direction;
+      newState.logs = []; // reset the log (put new session)
+      break;
     case ROTATE:
-      return {
-        ...state,
-        direction: action.direction,
-      };
+      newState.direction = action.direction;
+      break;
     case MOVE:
-      return {
-        ...state,
-        ...moveRobot(state, action.step),
-      }
+      const newPosition = moveRobot(newState, action.step);
+      newState.x = newPosition.x;
+      newState.y = newPosition.y;
+      break;
+    case SAVE:
+      saveLog(newState.logs);
+      break;
     default:
       return state;
   }
+
+  pushLog(newState, action.type);
+
+  return newState;
 };
 
 export default appReducer;
